@@ -1,20 +1,24 @@
 class FuelQuantityError(ValueError):
-    """Количество топлива должно быть положительным"""
+    """Количество топлива должно быть положительным."""
+
     def __init__(self):
         super().__init__("Количество топлива должно быть положительным")
 
 class OverfillError(ValueError):
     """Вы пытаетесь залить слишком много бензина!"""
+
     def __init__(self):
         super().__init__("Вы пытаетесь залить слишком много бензина!")
 
 class DistanceError(ValueError):
-    """Дистанция должна быть положительной"""
+    """Дистанция должна быть положительной."""
+
     def __init__(self):
         super().__init__("Дистанция должна быть положительной")
 
 class InsufficientFuelError(ValueError):
     """Не доедем жеж..."""
+
     def __init__(self):
         super().__init__("Не доедем жеж...")
 
@@ -36,16 +40,16 @@ class Car:
 
     def refuel_car(self, fuel_quantity: float) -> None:
         if fuel_quantity <= 0:
-            raise FuelQuantityError()
+            raise FuelQuantityError
         if self._fuel_in_tank + fuel_quantity > self._max_fuel_capacity + 1e-9:
-            raise OverfillError()
+            raise OverfillError
         self._fuel_in_tank += fuel_quantity
 
     def drive(self, distance_km: float) -> float:
         if distance_km <= 0:
-            raise DistanceError()
+            raise DistanceError
         fuel_needed = self._consumption * (distance_km / 100)
         if self._fuel_in_tank < fuel_needed - 1e-9:
-            raise InsufficientFuelError()
+            raise InsufficientFuelError
         self._fuel_in_tank -= fuel_needed
         return self._fuel_in_tank
