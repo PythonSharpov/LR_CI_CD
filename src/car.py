@@ -1,15 +1,29 @@
-class Car:
-    # Константы с сообщениями об ошибках
-    ERR_FUEL_QUANTITY_POSITIVE = "Количество топлива должно быть положительным"
-    ERR_OVERFILL = "Вы пытаетесь залить слишком много бензина!"
-    ERR_DISTANCE_POSITIVE = "Дистанция должна быть положительной"
-    ERR_INSUFFICIENT_FUEL = "Не доедем жеж..."
+class FuelQuantityError(ValueError):
+    """Количество топлива должно быть положительным"""
+    def __init__(self):
+        super().__init__("Количество топлива должно быть положительным")
 
+class OverfillError(ValueError):
+    """Вы пытаетесь залить слишком много бензина!"""
+    def __init__(self):
+        super().__init__("Вы пытаетесь залить слишком много бензина!")
+
+class DistanceError(ValueError):
+    """Дистанция должна быть положительной"""
+    def __init__(self):
+        super().__init__("Дистанция должна быть положительной")
+
+class InsufficientFuelError(ValueError):
+    """Не доедем жеж..."""
+    def __init__(self):
+        super().__init__("Не доедем жеж...")
+
+class Car:
     DEFAULT_CONSUMPTION = 8.0
 
     def __init__(self, model: str, fuel_capacity: float, consumption: float = DEFAULT_CONSUMPTION) -> None:
         if fuel_capacity <= 0:
-            raise ValueError("Ёмкость бака должна быть положительной")  # Это сообщение тоже можно вынести, но линтер пока не ругается
+            raise ValueError("Ёмкость бака должна быть положительной")
         if consumption <= 0:
             raise ValueError("Расход топлива должен быть положительным")
         self._model = model
@@ -22,16 +36,16 @@ class Car:
 
     def refuel_car(self, fuel_quantity: float) -> None:
         if fuel_quantity <= 0:
-            raise ValueError(self.ERR_FUEL_QUANTITY_POSITIVE)
+            raise FuelQuantityError()
         if self._fuel_in_tank + fuel_quantity > self._max_fuel_capacity + 1e-9:
-            raise ValueError(self.ERR_OVERFILL)
+            raise OverfillError()
         self._fuel_in_tank += fuel_quantity
 
     def drive(self, distance_km: float) -> float:
         if distance_km <= 0:
-            raise ValueError(self.ERR_DISTANCE_POSITIVE)
+            raise DistanceError()
         fuel_needed = self._consumption * (distance_km / 100)
         if self._fuel_in_tank < fuel_needed - 1e-9:
-            raise ValueError(self.ERR_INSUFFICIENT_FUEL)
+            raise InsufficientFuelError()
         self._fuel_in_tank -= fuel_needed
         return self._fuel_in_tank
