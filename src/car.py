@@ -5,7 +5,7 @@ class FuelQuantityError(ValueError):
         super().__init__("Количество топлива должно быть положительным")
 
 class OverfillError(ValueError):
-    """Вы пытаетесь залить слишком много бензина!"""
+    """Вы пытаетесь залить слишком много бензина."""
 
     def __init__(self):
         super().__init__("Вы пытаетесь залить слишком много бензина!")
@@ -17,19 +17,21 @@ class DistanceError(ValueError):
         super().__init__("Дистанция должна быть положительной")
 
 class InsufficientFuelError(ValueError):
-    """Не доедем жеж..."""
+    """Не доедем жеж."""
 
     def __init__(self):
         super().__init__("Не доедем жеж...")
 
 class Car:
     DEFAULT_CONSUMPTION = 8.0
+    ERR_CAPACITY_POSITIVE = "Ёмкость бака должна быть положительной"
+    ERR_CONSUMPTION_POSITIVE = "Расход топлива должен быть положительным"
 
     def __init__(self, model: str, fuel_capacity: float, consumption: float = DEFAULT_CONSUMPTION) -> None:
         if fuel_capacity <= 0:
-            raise ValueError("Ёмкость бака должна быть положительной")
+            raise ValueError(self.ERR_CAPACITY_POSITIVE)
         if consumption <= 0:
-            raise ValueError("Расход топлива должен быть положительным")
+            raise ValueError(self.ERR_CONSUMPTION_POSITIVE)
         self._model = model
         self._max_fuel_capacity = fuel_capacity
         self._consumption = consumption
