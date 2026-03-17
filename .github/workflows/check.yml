@@ -1,0 +1,27 @@
+name: ChecksLR4
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pytest ruff
+
+      - name: Run unit tests
+        run: |
+        cd src
+        python -m pytest -v
+
+      - name: Run Ruff code checking
+        run: ruff check --output-format=github .
