@@ -5,16 +5,18 @@ class TestCase(unittest.TestCase):
     def setUp(self):
         self.car = Car(model="BMW X5", fuel_capacity=80)
 
-    def tearDown(self):
-        pass
-
     def test_drive(self):
+        # Сначала заправим машину, чтобы было чем ехать
+        self.car.refuel_car(60)  # допустим, 60 литров
+        # Проверим, что после поездки на 20 км уровень уменьшился
         self.car.drive(20)
-        self.assertRaises(Exception, lambda: self.car.drive(80000))
+        # Проверим, что слишком длинная поездка вызывает исключение
+        with self.assertRaises(ValueError):
+            self.car.drive(80000)
 
     def test_refuel(self):
-        # Заправим 20 литров
         self.car.refuel_car(20)
-        assert self.car.get_current_fuel_level() == 20
-        # Проверим, что будет исключение, если перельем
-        self.assertRaises(Exception, lambda: self.car.refuel_car(80))0
+        self.assertEqual(self.car.get_current_fuel_level(), 20)
+        # Проверка перелива
+        with self.assertRaises(ValueError):
+            self.car.refuel_car(80)
